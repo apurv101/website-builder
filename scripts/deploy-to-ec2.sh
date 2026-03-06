@@ -4,7 +4,7 @@ set -euo pipefail
 # Deploy website-builder config/skills to existing OpenClaw EC2 instance
 # Usage: ./scripts/deploy-to-ec2.sh
 
-EC2_IP="${EC2_IP:-44.192.92.142}"
+EC2_IP="${EC2_IP:-3.223.52.227}"
 EC2_USER="${EC2_USER:-ubuntu}"
 SSH_KEY="${SSH_KEY:-$HOME/.ssh/openclaw-key.pem}"
 SSH="ssh -i $SSH_KEY -o StrictHostKeyChecking=no $EC2_USER@$EC2_IP"

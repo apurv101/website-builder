@@ -6,6 +6,6 @@
     }
   },
   "skills": {
-    "allowBundled": ["browser", "canvas"]
+    "allowBundled": ["browser", "canvas", "openai-image-gen"]
   }
 }
