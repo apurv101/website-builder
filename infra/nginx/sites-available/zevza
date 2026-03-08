@@ -1,0 +1,35 @@
+server {
+    listen 80;
+    server_name *.zevza.com zevza.com;
+    return 301 https://$host$request_uri;
+}
+
+server {
+    listen 443 ssl;
+    server_name zevza.com;
+
+    ssl_certificate /etc/letsencrypt/live/zevza.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/zevza.com/privkey.pem;
+
+    root /var/www/sites/zevza/dist;
+    index index.html;
+
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+}
+
+server {
+    listen 443 ssl;
+    server_name ~^(?<subdomain>.+)\.zevza\.com$;
+
+    ssl_certificate /etc/letsencrypt/live/zevza.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/zevza.com/privkey.pem;
+
+    root /var/www/sites/$subdomain/dist;
+    index index.html;
+
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+}

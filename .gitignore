@@ -2,3 +2,8 @@ node_modules/
 .env
 *.log
 .DS_Store
+
+# Infra secrets (never commit)
+infra/ec2-compose/.env
+infra/nginx/ssl/*.pem
+infra/nginx/ssl/*.key
