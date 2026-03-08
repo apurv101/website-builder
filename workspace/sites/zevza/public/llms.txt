@@ -1,0 +1,38 @@
+# Zevza — AI Website Builder
+
+> Build a website by chatting with AI. Deploy instantly.
+
+## What is Zevza?
+Zevza is an AI-powered website builder. Users chat with an AI assistant named Zev to design, build, and deploy professional websites — no coding required.
+
+## URL
+https://zevza.com
+
+## Key Features
+- **Conversational AI builder**: Describe what you want in plain English. Zev builds it.
+- **Modern tech stack**: Sites are built with Vite + React + TypeScript for fast, modern performance.
+- **Instant deployment**: Every site gets deployed to a `*.zevza.com` subdomain automatically.
+- **Free to use**: No credit card, no signup friction.
+- **Full customization**: Iterate on your site through conversation — change layouts, colors, content, and more.
+
+## Use Cases
+- Personal portfolio sites
+- Landing pages for startups and side projects
+- Small business websites
+- Event and wedding pages
+- Developer blogs and project showcases
+
+## How It Works
+1. Visit https://zevza.com
+2. Start chatting with Zev (the AI assistant)
+3. Describe the website you want
+4. Zev builds it in real time
+5. Your site goes live at `yourname.zevza.com`
+
+## Technology
+- Frontend: Vite + React + TypeScript
+- Deployment: Instant via subdomain routing on zevza.com
+- AI: Powered by Claude (Anthropic)
+
+## Contact
+Website: https://zevza.com

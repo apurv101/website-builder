@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://zevza.com/sitemap.xml
