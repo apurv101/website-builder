@@ -1,42 +1,18 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Build and deploy the website-builder container
-# Usage: ./scripts/deploy.sh [build|push|run]
+# Deploy website-builder by pulling latest from GitHub on EC2
+# Usage: ./scripts/deploy.sh
 
-IMAGE_NAME="website-builder"
-AWS_REGION="${AWS_REGION:-us-east-1}"
-AWS_ACCOUNT_ID="${AWS_ACCOUNT_ID:-}"
-ECR_REPO="${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${IMAGE_NAME}"
+EC2_IP="${EC2_IP:-3.223.52.227}"
+EC2_USER="${EC2_USER:-ubuntu}"
+SSH_KEY="${SSH_KEY:-$HOME/.ssh/openclaw-key.pem}"
+SSH="ssh -i $SSH_KEY -o StrictHostKeyChecking=no $EC2_USER@$EC2_IP"
 
-case "${1:-build}" in
-  build)
-    echo "Building Docker image..."
-    docker build -t "$IMAGE_NAME" .
-    echo "Done. Run locally with: docker compose up"
-    ;;
+echo "==> Deploying website-builder via git pull on $EC2_IP"
 
-  push)
-    if [ -z "$AWS_ACCOUNT_ID" ]; then
-      echo "Set AWS_ACCOUNT_ID first"
-      exit 1
-    fi
-    echo "Logging into ECR..."
-    aws ecr get-login-password --region "$AWS_REGION" | \
-      docker login --username AWS --password-stdin "$ECR_REPO"
-    echo "Tagging and pushing..."
-    docker tag "$IMAGE_NAME" "$ECR_REPO:latest"
-    docker push "$ECR_REPO:latest"
-    echo "Pushed to $ECR_REPO:latest"
-    ;;
+$SSH "cd ~/website-builder && git pull && ./scripts/ec2-apply.sh"
 
-  run)
-    echo "Running locally..."
-    docker compose up --build
-    ;;
-
-  *)
-    echo "Usage: $0 [build|push|run]"
-    exit 1
-    ;;
-esac
+echo ""
+echo "==> Done! Website builder is live."
+echo "    SSH tunnel: ssh -i $SSH_KEY -N -L 19000:127.0.0.1:18789 $EC2_USER@$EC2_IP"

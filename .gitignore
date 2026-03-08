@@ -7,3 +7,4 @@ node_modules/
 infra/ec2-compose/.env
 infra/nginx/ssl/*.pem
 infra/nginx/ssl/*.key
+infra/ec2-compose/auth-profiles.json
