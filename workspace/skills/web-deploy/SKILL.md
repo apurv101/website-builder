@@ -19,6 +19,12 @@ NODE_ENV=development npm run build
 
 Verify the `dist/` folder exists and contains `index.html`.
 
+If the project uses user-provided images, verify they are present in `dist/`:
+```bash
+ls dist/images/   # Should contain all images from public/images/
+```
+If images are missing, rebuild or copy them manually into `dist/images/`.
+
 ## 2. Deploy to the server
 
 Copy the built `dist/` directory to the server's sites directory:

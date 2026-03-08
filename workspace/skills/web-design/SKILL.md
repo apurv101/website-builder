@@ -48,9 +48,25 @@ Not every page needs all sections. Ask the user what matters most.
 
 ### Hero
 - Full-width background (color or gradient, avoid stock images unless provided)
+- If the user sent a hero image or photo, use it as the hero background or feature image
 - Headline: short, benefit-driven (6-10 words)
 - Subtext: 1-2 sentences max
 - One primary CTA button with clear action text ("Get Started", "Book Now")
+
+### User-provided images (logos, photos, screenshots)
+- When the user sends a logo, use it in the navbar and footer instead of text
+- Size logos appropriately (typically 40-60px height in navbar)
+- For hero photos, consider using as a background with an overlay for text readability:
+  ```css
+  .hero {
+    background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('/images/hero.jpg');
+    background-size: cover;
+    background-position: center;
+  }
+  ```
+- For team/product photos, use `object-fit: cover` to maintain aspect ratio in fixed containers
+- Always add meaningful `alt` text based on what the image shows
+- Reference images as `/images/<filename>` (served from `public/images/`)
 
 ### Feature cards
 - Grid layout: 1 column mobile, 2-3 columns desktop

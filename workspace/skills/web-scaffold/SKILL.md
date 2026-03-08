@@ -44,10 +44,22 @@ Keep it simple. One-page landing pages don't need complex routing.
     components/      # Only if needed (e.g. Navbar, Footer, Hero)
   public/
     favicon.ico
+    images/          # User-provided images (logos, photos, screenshots)
   index.html
   package.json
   vite.config.ts
 ```
+
+## 3b. User-provided images
+
+If the user has sent images (via WhatsApp), copy them into the project immediately — media files expire after 2 minutes:
+
+```bash
+mkdir -p <project-name>/public/images
+cp <MediaPath> <project-name>/public/images/<descriptive-name>.ext
+```
+
+Choose a descriptive filename (e.g. `logo.png`, `hero-bg.jpg`). Reference them in components as `/images/<filename>`. Vite copies everything in `public/` into `dist/` automatically.
 
 ## 4. Styling approach
 
