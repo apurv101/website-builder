@@ -21,10 +21,12 @@ Don't overwhelm — if they seem unsure, suggest sensible defaults and iterate.
 
 Always use Vite + React + TypeScript. This is the standard stack.
 
+**IMPORTANT:** The container has `NODE_ENV=production` set, which causes `npm install` to skip devDependencies (vite, typescript, etc.). You MUST override it.
+
 ```bash
 npm create vite@latest <project-name> -- --template react-ts
 cd <project-name>
-npm install
+NODE_ENV=development npm install
 ```
 
 Use a short, URL-safe project name derived from what the user described (e.g. "joes-bakery", "saas-launch", "wedding-rsvp").
@@ -57,8 +59,8 @@ Keep it simple. One-page landing pages don't need complex routing.
 ## 5. Build and preview
 
 ```bash
-npm run build    # Output goes to dist/
-npm run preview  # Preview production build locally
+NODE_ENV=development npm run build    # Output goes to dist/
+npm run preview                       # Preview production build locally
 ```
 
 Use the browser tool to show the user their site after building.

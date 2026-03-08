@@ -9,9 +9,12 @@ When the user's site is ready to go live:
 
 ## 1. Build the project
 
+**IMPORTANT:** The container has `NODE_ENV=production`, which skips devDependencies. Always override it for install and build.
+
 ```bash
 cd <project-directory>
-npm run build
+NODE_ENV=development npm install
+NODE_ENV=development npm run build
 ```
 
 Verify the `dist/` folder exists and contains `index.html`.
@@ -40,7 +43,8 @@ Once deployed, share the URL:
 If the user wants changes after the site is live, just rebuild and redeploy:
 
 ```bash
-npm run build
+NODE_ENV=development npm install
+NODE_ENV=development npm run build
 cp -r dist/* /var/www/sites/<project-name>/dist/
 ```
 
