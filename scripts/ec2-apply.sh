@@ -14,6 +14,7 @@ echo "==> Applying website-builder config on EC2"
 echo "==> Copying workspace files (SOUL.md + skills)..."
 mkdir -p ~/.openclaw/workspace/skills
 cp "$PROJECT_DIR/workspace/SOUL.md" ~/.openclaw/workspace/SOUL.md
+cp "$PROJECT_DIR/workspace/IDENTITY.md" ~/.openclaw/workspace/IDENTITY.md
 cp -r "$PROJECT_DIR/workspace/skills/"* ~/.openclaw/workspace/skills/
 
 # 2. Deploy docker-compose.yml
