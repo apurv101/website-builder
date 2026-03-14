@@ -7,6 +7,8 @@ description: Design and style landing pages with modern CSS and responsive layou
 
 When designing or styling a landing page:
 
+> **If a template was applied**, use these guidelines to refine and customize — don't redesign from scratch. The template's design recipe has already established the visual direction. Focus on swapping in the user's content, adjusting colors for their brand, and making refinements they request.
+
 ## Landing page structure
 
 A typical landing page flows top to bottom:

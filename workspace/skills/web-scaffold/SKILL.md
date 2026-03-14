@@ -183,6 +183,27 @@ If the site needs to store or manage data (store, blog with CMS, dashboard, inve
 
 1. Create a `migrations/` directory for SQL migration files
 2. Create `src/api.ts` with the API helper (see the frontend-design skill)
+3. Add the `/api` proxy to `vite.config.ts` so local dev hits the local PostgREST:
+
+```typescript
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+
+export default defineConfig({
+  plugins: [react()],
+  server: {
+    proxy: {
+      '/api': {
+        target: 'http://localhost:3001',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, ''),
+      },
+    },
+  },
+})
+```
+
+This only affects `npm run dev` — production builds are unaffected. The local PostgREST is started by `./scripts/local-up.sh` from the repo root.
 
 These are needed for the db-design and frontend-design skills. You can add them later too — a simple site can grow into a data-connected one at any time.
 

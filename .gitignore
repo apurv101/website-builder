@@ -3,6 +3,9 @@ node_modules/
 *.log
 .DS_Store
 
+# Local dev data
+pgdata-local/
+
 # Infra secrets (never commit)
 infra/ec2-compose/.env
 infra/nginx/ssl/*.pem

@@ -10,6 +10,7 @@ CREATE TABLE IF NOT EXISTS public.applied_migrations (
 -- PostgREST dynamic schema discovery
 -- Called on each schema cache reload to register all site_* schemas
 CREATE SCHEMA IF NOT EXISTS pgrst;
+GRANT USAGE ON SCHEMA pgrst TO authenticator;
 
 CREATE OR REPLACE FUNCTION pgrst.pre_config()
 RETURNS void AS $$
@@ -22,7 +23,7 @@ BEGIN
     WHERE schema_name LIKE 'site\_%' ESCAPE '\';
 
     IF schemas IS NOT NULL THEN
-        PERFORM set_config('pgrst.db_schemas', schemas, true);
+        PERFORM set_config('pgrst.db_schemas', 'public, ' || schemas, true);
     ELSE
         PERFORM set_config('pgrst.db_schemas', 'public', true);
     END IF;
@@ -38,6 +39,7 @@ DECLARE
 BEGIN
     EXECUTE format('CREATE SCHEMA IF NOT EXISTS %I', s);
     EXECUTE format('GRANT USAGE ON SCHEMA %I TO web_anon', s);
+    EXECUTE format('GRANT USAGE ON SCHEMA %I TO authenticator', s);
 
     -- Auto-grant read access on all future tables/views created by postgres
     EXECUTE format('ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA %I GRANT SELECT ON TABLES TO web_anon', s);

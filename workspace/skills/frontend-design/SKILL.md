@@ -17,7 +17,7 @@ Create `src/api.ts` in every data-connected project. The `Accept-Profile` / `Con
 
 ```typescript
 // src/api.ts
-const subdomain = window.location.hostname.split('.')[0];
+const subdomain = import.meta.env.VITE_SITE_NAME || window.location.hostname.split('.')[0];
 const SCHEMA = 'site_' + subdomain.replace(/-/g, '_');
 
 export async function query<T = any>(
@@ -272,16 +272,21 @@ Follow all guidelines from the web-design skill, plus:
 
 ## Local development
 
-For local preview, the API won't be available (PostgREST runs on the server). Use mock data for previews:
+The local dev stack (`./scripts/local-up.sh`) runs PostgreSQL + PostgREST locally, so API calls work on localhost via Vite's dev proxy.
 
+**Setup:**
+1. Run `./scripts/local-up.sh` from the repo root (starts Postgres on port 5433, PostgREST on port 3001)
+2. Add `VITE_SITE_NAME=<your-site>` to the site's `.env` file (Vite reads this automatically)
+3. Run migrations: `DATABASE_URL=postgres://postgres:localdev@localhost:5433/websites node ../../scripts/migrate.js <your-site>`
+4. `npm run dev` — the `/api/` proxy in `vite.config.ts` routes to local PostgREST
+
+The `VITE_SITE_NAME` env var is needed because `window.location.hostname` returns `localhost` instead of the subdomain. The `api.ts` template handles this automatically:
 ```typescript
-// src/api.ts — add at the top for local dev
-const IS_LOCAL = window.location.hostname === 'localhost';
-
-// In query():
-if (IS_LOCAL) {
-  return MOCK_DATA[view] || [];
-}
+const subdomain = import.meta.env.VITE_SITE_NAME || window.location.hostname.split('.')[0];
 ```
 
-Add a `src/mock-data.ts` file with sample data matching the database views. Remove or gate behind `IS_LOCAL` before deploying.
+**Optional mock data fallback:** If you want to preview UI without the local stack running, you can still use mock data:
+```typescript
+const IS_LOCAL = window.location.hostname === 'localhost';
+// In query(): if (IS_LOCAL && !import.meta.env.VITE_SITE_NAME) return MOCK_DATA[view] || [];
+```
