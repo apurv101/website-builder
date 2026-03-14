@@ -61,6 +61,15 @@ cp <MediaPath> <project-name>/public/images/<descriptive-name>.ext
 
 Choose a descriptive filename (e.g. `logo.png`, `hero-bg.jpg`). Reference them in components as `/images/<filename>`. Vite copies everything in `public/` into `dist/` automatically.
 
+## 3c. Data-connected sites
+
+If the site needs to store or manage data (store, blog with CMS, dashboard, inventory):
+
+1. Create a `migrations/` directory for SQL migration files
+2. Create `src/api.ts` with the API helper (see the frontend-design skill)
+
+These are needed for the db-design and frontend-design skills. You can add them later too — a simple site can grow into a data-connected one at any time.
+
 ## 4. Styling approach
 
 - Write plain CSS in App.css (no Tailwind, no CSS-in-JS — keep dependencies minimal)
