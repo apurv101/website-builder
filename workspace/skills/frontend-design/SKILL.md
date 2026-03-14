@@ -13,7 +13,7 @@ Sites connect to the database through PostgREST, which exposes database views an
 
 ### API helper
 
-Create `src/api.ts` in every data-connected project:
+Create `src/api.ts` in every data-connected project. The `Accept-Profile` / `Content-Profile` headers tell PostgREST which site schema to use — this is derived automatically from the subdomain.
 
 ```typescript
 // src/api.ts

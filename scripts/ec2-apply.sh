@@ -26,10 +26,10 @@ if [[ -f "$INFRA_DIR/ec2-compose/docker-compose.yml" ]]; then
 fi
 
 # 3. Deploy postgres init scripts
-if [[ -d "$INFRA_DIR/postgres" ]]; then
+if [[ -d "$INFRA_DIR/ec2-compose/postgres-init" ]]; then
   echo "==> Copying postgres init scripts..."
   mkdir -p ~/openclaw/postgres-init
-  cp "$INFRA_DIR/postgres/"* ~/openclaw/postgres-init/
+  cp "$INFRA_DIR/ec2-compose/postgres-init/"* ~/openclaw/postgres-init/
   chmod +x ~/openclaw/postgres-init/*.sh 2>/dev/null || true
 fi
 

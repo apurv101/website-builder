@@ -177,3 +177,19 @@ c.connect()
   .finally(() => c.end());
 "
 ```
+
+## How PostgREST schema routing works
+
+Each site's data lives in its own schema (`site_<name>`). PostgREST dynamically discovers all `site_*` schemas via the `pgrst.pre_config()` function — no manual configuration needed.
+
+The frontend selects which schema to query using the `Accept-Profile` header (for reads) and `Content-Profile` header (for writes). The `api.ts` helper in the frontend-design skill handles this automatically by deriving the schema name from the subdomain.
+
+**You don't need to create proxy views or reference schema names in migrations.** Just create tables and views with unqualified names — the migration runner sets the search path automatically.
+
+## Seed data with stock
+
+If a view filters `WHERE stock > 0`, products with `stock = 0` (the default) won't appear. Always set stock explicitly when inserting seed data:
+
+```sql
+INSERT INTO products (name, price, stock) VALUES ('Widget', 29.99, 50);
+```
