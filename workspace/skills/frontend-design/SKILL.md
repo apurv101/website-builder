@@ -32,7 +32,9 @@ export async function query<T = any>(
     headers: { 'Accept-Profile': SCHEMA },
   });
   if (!res.ok) throw new Error(`API error: ${res.status}`);
-  return res.json();
+  const data = await res.json();
+  if (!Array.isArray(data)) return [];
+  return data;
 }
 
 export async function insert<T = any>(
@@ -122,6 +124,7 @@ function ProductGrid() {
   useEffect(() => {
     query<Product>('storefront_products', { order: 'name.asc' })
       .then(setProducts)
+      .catch(() => setProducts([]))
       .finally(() => setLoading(false));
   }, []);
 
@@ -194,7 +197,9 @@ function ProductList() {
   useEffect(() => {
     const params: Record<string, string> = { order: 'name.asc' };
     if (category) params['category'] = `eq.${category}`;
-    query<Product>('storefront_products', params).then(setProducts);
+    query<Product>('storefront_products', params)
+      .then(setProducts)
+      .catch(() => setProducts([]));
   }, [category]);
 
   return (
