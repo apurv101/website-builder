@@ -5,75 +5,60 @@ description: Deploy a site to the zevza.com server (static files + database migr
 
 # Web Deploy
 
-When the user's site is ready to go live:
-
-## 1. Apply database migrations (if applicable)
-
-If the project has a `migrations/` directory with `.sql` files, apply them first:
+When the user's site is ready to go live, use the deploy script:
 
 ```bash
-cd /home/node/.openclaw/workspace/scripts
-node migrate.js <project-name>
+/home/node/.openclaw/workspace/scripts/site-deploy.sh <project-name>
 ```
 
-This creates the database schema (if new), applies any pending SQL migrations, and notifies PostgREST to expose the new endpoints.
+This single command handles the entire deploy pipeline.
 
-Skip this step if the project has no `migrations/` directory (static-only site).
+## What the script does
 
-## 2. Build the project
+1. **Validates** the site name and project directory
+2. **Applies database migrations** (if `migrations/*.sql` exist) via `migrate.js`
+3. **Installs dependencies** with `NODE_ENV=development npm install`
+4. **Type checks** with `npx tsc -b` — blocks deploy on type errors
+5. **Builds** with `npm run build` — blocks deploy on build errors
+6. **Validates build output**: checks for `dist/index.html`, JS/CSS bundles, and images
+7. **Backs up** the current deployment (keeps last 3 backups)
+8. **Copies** new `dist/` to `/var/www/sites/<project-name>/dist/`
 
-**IMPORTANT:** The container has `NODE_ENV=production`, which skips devDependencies. Always override it for install and build.
+## Handling failures
+
+If the script exits with an error, it will tell you exactly what failed:
+
+- **Type errors**: Fix the TypeScript errors shown in the output, then re-run
+- **Build errors**: Fix the build errors, then re-run
+- **Missing build output**: Check that `index.html`, JS bundles, and CSS are being generated. Rebuild if needed
+
+The script blocks on errors — a broken build never reaches production.
+
+## Rollback
+
+If a deployed site has issues, restore the previous version:
 
 ```bash
-cd <project-directory>
-NODE_ENV=development npm install
-NODE_ENV=development npm run build
+/home/node/.openclaw/workspace/scripts/site-deploy.sh rollback <project-name>
 ```
 
-Verify the `dist/` folder exists and contains `index.html`.
+This restores the most recent backup instantly.
 
-If the project uses user-provided images, verify they are present in `dist/`:
-```bash
-ls dist/images/   # Should contain all images from public/images/
-```
-If images are missing, rebuild or copy them manually into `dist/images/`.
+## Redeploying updates
 
-## 3. Deploy to the server
-
-Copy the built `dist/` directory to the server's sites directory:
+After making changes to a live site, just run the same deploy command again:
 
 ```bash
-mkdir -p /var/www/sites/<project-name>/dist
-cp -r dist/* /var/www/sites/<project-name>/dist/
+/home/node/.openclaw/workspace/scripts/site-deploy.sh <project-name>
 ```
 
-The project name must be URL-safe (lowercase, hyphens, no spaces). Use the same name from scaffolding.
+The current deployment is automatically backed up before the new one goes live.
 
-The site is instantly live — no DNS setup needed per site. The wildcard `*.zevza.com` handles all subdomains automatically.
+## After deploy
 
-## 4. Tell the user
-
-Once deployed, share the URL:
 - **Live at:** `https://<project-name>.zevza.com`
 - SSL is automatic via Let's Encrypt wildcard cert
 - If the site has a database: API is available at `https://<project-name>.zevza.com/api/`
-
-## 5. Redeploying updates
-
-If the user wants changes after the site is live, just rebuild and redeploy:
-
-```bash
-# Apply new migrations (if any)
-cd /home/node/.openclaw/workspace/scripts && node migrate.js <project-name>
-
-# Rebuild and copy
-cd <project-directory>
-NODE_ENV=development npm install
-NODE_ENV=development npm run build
-cp -r dist/* /var/www/sites/<project-name>/dist/
-```
-
-The subdomain stays the same. Updates are live instantly.
 
 ## Important notes
 
